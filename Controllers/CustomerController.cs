@@ -35,5 +35,3 @@ public class CustomerController : ControllerBase
         return _customers.Where(c => c.Id == customerId).First();
     }
 }
-
-// 1-containerize-customerservice
