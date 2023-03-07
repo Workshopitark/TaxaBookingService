@@ -18,7 +18,6 @@ public class CustomerController : ControllerBase
          City = "H�rning",
          TaxNumber = "DK-75627732",
          ContactName = "Dennis Jørgensen"
-   // lol
      }
  };
 
