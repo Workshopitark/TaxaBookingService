@@ -38,14 +38,10 @@ public class TaxaBookingController : ControllerBase
 
         new TaxaBooking()
         {
-            Id = 1,
-            Name = "Internationale vognmænd A/S",
-            Address1 = "Nydamsvej 8",
-            Address2 = null,
-            PostalCode = 8362,
-            City = "H�rning",
-            TaxNumber = "DK-75627732",
-            ContactName = "Dennis Jørgensen"
+            Kundenavn = 1,
+            Starttidspunkt = "Internationale vognmænd A/S",
+            Startsted = "Nydamsvej 8",
+            Endested = null,
         }
 
     };
