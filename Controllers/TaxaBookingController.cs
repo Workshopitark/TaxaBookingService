@@ -38,10 +38,10 @@ public class TaxaBookingController : ControllerBase
 
         new TaxaBooking()
         {
-            Kundenavn = 1,
-            Starttidspunkt = "Internationale vognmænd A/S",
+            Kundenavn = "Peter Petersen",
+            Starttidspunkt = DateTime.Now,
             Startsted = "Nydamsvej 8",
-            Endested = null,
+            Endested = "Nydamsvej 9",
         }
 
     };
