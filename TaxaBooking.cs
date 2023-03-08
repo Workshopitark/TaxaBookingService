@@ -1,6 +1,6 @@
-namespace CustomerService;
+namespace TaxaBookingService;
 
-public class Customer
+public class TaxaBooking
 {
     public int Id { get; set; }
     public string? Name { get; set; }
