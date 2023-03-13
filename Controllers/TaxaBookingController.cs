@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Text;
 using RabbitMQ.Client;
 using System.Threading.Channels;
+using System.Text.Json;
 
 namespace TaxaBookingService;
 
@@ -19,12 +20,20 @@ namespace TaxaBookingService;
 public class TaxaBookingController : ControllerBase
 {
 
+    private readonly ILogger<TaxaBookingController> _logger;
+    private readonly IModel _channel;
+    private readonly string _MQHostName;
+
+
     // constructor
     public TaxaBookingController(ILogger<TaxaBookingController> logger, IConfiguration configuration)
     {
         _logger = logger;
 
-        var factory = new ConnectionFactory { HostName = "localhost" };
+        
+        _MQHostName = configuration["MQHostName"] ?? "rabbitmq";
+
+        var factory = new ConnectionFactory { HostName = _MQHostName };
         using var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
 
@@ -33,11 +42,10 @@ public class TaxaBookingController : ControllerBase
 
     private static List<TaxaBooking> _bookings = new List<TaxaBooking>
     {
-        
+        // hard code data
     };
 
-    private readonly ILogger<TaxaBookingController> _logger;
-    private readonly IModel _channel;
+    
 
 
     //get metoder
@@ -55,23 +63,22 @@ public class TaxaBookingController : ControllerBase
     {
         _logger.LogInformation("funktion ramt");
 
-        using var channel = connection.CreateModel();
-
+        
         //
 
-        channel.QueueDeclare(queue: "hello",
+        _channel.QueueDeclare(queue: "planqueue",
                              durable: false,
                              exclusive: false,
                              autoDelete: false,
                              arguments: null);
 
-        const string message = "Hello World daniel!";
-        var body = Encoding.UTF8.GetBytes(message);
+        
+        var message = JsonSerializer.SerializeToUtf8Bytes(taxaBooking);
 
-        channel.BasicPublish(exchange: string.Empty,
+        _channel.BasicPublish(exchange: string.Empty,
                              routingKey: "hello",
                              basicProperties: null,
-                             body: body);
+                             body: message);
 
     }
 
