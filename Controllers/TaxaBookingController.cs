@@ -19,13 +19,6 @@ namespace TaxaBookingService;
 public class TaxaBookingController : ControllerBase
 {
 
-
-
-
-    private readonly ILogger<TaxaBookingController> _logger;
-    private readonly IModel _channel;
-
-
     // constructor
     public TaxaBookingController(ILogger<TaxaBookingController> logger, IConfiguration configuration)
     {
@@ -38,6 +31,21 @@ public class TaxaBookingController : ControllerBase
     }
 
 
+    private static List<TaxaBooking> _bookings = new List<TaxaBooking>
+    {
+        
+    };
+
+    private readonly ILogger<TaxaBookingController> _logger;
+    private readonly IModel _channel;
+
+
+    //get metoder
+    [HttpGet("{BookingId}", Name = "GetBookingById")]
+    public TaxaBooking Get(int BookingId)
+    {
+        
+    }
 
 
 
@@ -47,22 +55,26 @@ public class TaxaBookingController : ControllerBase
     {
         _logger.LogInformation("funktion ramt");
 
-        _channel.QueueDeclare(queue: "hello",
-                     durable: false,
-                     exclusive: false,
-                     autoDelete: false,
-                     arguments: null);
+        using var channel = connection.CreateModel();
+
+        //
+
+        channel.QueueDeclare(queue: "hello",
+                             durable: false,
+                             exclusive: false,
+                             autoDelete: false,
+                             arguments: null);
 
         const string message = "Hello World daniel!";
         var body = Encoding.UTF8.GetBytes(message);
 
-        _channel.BasicPublish(exchange: string.Empty,
+        channel.BasicPublish(exchange: string.Empty,
                              routingKey: "hello",
                              basicProperties: null,
                              body: body);
 
-
     }
+
 
 
 }
