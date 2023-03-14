@@ -34,7 +34,7 @@ public class TaxaBookingController : ControllerBase
         _MQHostName = configuration["MQHostName"] ?? "rabbitmq";
 
         var factory = new ConnectionFactory { HostName = _MQHostName };
-        using var connection = factory.CreateConnection();
+        var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
 
     }
