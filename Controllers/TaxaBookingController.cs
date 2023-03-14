@@ -39,22 +39,15 @@ public class TaxaBookingController : ControllerBase
 
     }
 
-    
+
     private List<TaxaBooking> _bookings = new List<TaxaBooking>
     {
 
-    // hard code data
+        // hard code data
 
     };
 
 
-
-    //get metoder
-    [HttpGet("{BookingId}", Name = "GetBookingById")]
-    public TaxaBooking Get(int BookingId)
-    {
-        return _bookings.ToList();
-    }
 
 
 
@@ -64,20 +57,14 @@ public class TaxaBookingController : ControllerBase
     {
         _logger.LogInformation("funktion ramt");
 
-        try
+        var newTaxaBooking = new TaxaBooking
         {
-            var newTaxaBooking = new TaxaBooking
-            {
-                Kundenavn = taxaBooking.Kundenavn,
-                Starttidspunkt = taxaBooking.Starttidspunkt,
-                Startsted = taxaBooking.Startsted,
-                Endested = taxaBooking.Endested
-            };
-        }
-        catch (Exception ex)
-        {
+            Kundenavn = taxaBooking.Kundenavn,
+            Starttidspunkt = taxaBooking.Starttidspunkt,
+            Startsted = taxaBooking.Startsted,
+            Endested = taxaBooking.Endested
+        };
 
-        }
 
         //
 
@@ -88,12 +75,14 @@ public class TaxaBookingController : ControllerBase
                              arguments: null);
 
 
-        var message = JsonSerializer.SerializeToUtf8Bytes(taxaBooking);
+        var message = JsonSerializer.SerializeToUtf8Bytes(newTaxaBooking);
 
         _channel.BasicPublish(exchange: string.Empty,
-                             routingKey: "hello",
+                             routingKey: "planqueue",
                              basicProperties: null,
                              body: message);
+
+        Console.WriteLine("status ok");
 
         return Ok(taxaBooking);
     }
