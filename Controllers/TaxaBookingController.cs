@@ -30,7 +30,7 @@ public class TaxaBookingController : ControllerBase
     {
         _logger = logger;
 
-        
+
         _MQHostName = configuration["MQHostName"] ?? "rabbitmq";
 
         var factory = new ConnectionFactory { HostName = _MQHostName };
@@ -39,20 +39,21 @@ public class TaxaBookingController : ControllerBase
 
     }
 
-
-    private static List<TaxaBooking> _bookings = new List<TaxaBooking>
+    
+    private List<TaxaBooking> _bookings = new List<TaxaBooking>
     {
-        // hard code data
+
+    // hard code data
+
     };
 
-    
 
 
     //get metoder
     [HttpGet("{BookingId}", Name = "GetBookingById")]
     public TaxaBooking Get(int BookingId)
     {
-        
+        return _bookings.ToList();
     }
 
 
@@ -63,7 +64,21 @@ public class TaxaBookingController : ControllerBase
     {
         _logger.LogInformation("funktion ramt");
 
-        
+        try
+        {
+            var newTaxaBooking = new TaxaBooking
+            {
+                Kundenavn = taxaBooking.Kundenavn,
+                Starttidspunkt = taxaBooking.Starttidspunkt,
+                Startsted = taxaBooking.Startsted,
+                Endested = taxaBooking.Endested
+            };
+        }
+        catch (Exception ex)
+        {
+
+        }
+
         //
 
         _channel.QueueDeclare(queue: "planqueue",
@@ -72,7 +87,7 @@ public class TaxaBookingController : ControllerBase
                              autoDelete: false,
                              arguments: null);
 
-        
+
         var message = JsonSerializer.SerializeToUtf8Bytes(taxaBooking);
 
         _channel.BasicPublish(exchange: string.Empty,
@@ -80,6 +95,7 @@ public class TaxaBookingController : ControllerBase
                              basicProperties: null,
                              body: message);
 
+        return Ok(taxaBooking);
     }
 
 
