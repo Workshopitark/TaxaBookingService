@@ -23,6 +23,8 @@ public class TaxaBookingController : ControllerBase
     private readonly ILogger<TaxaBookingController> _logger;
     private readonly IModel _channel;
     private readonly string _MQHostName;
+    private readonly string _pathCSV;
+    
 
 
     // constructor
@@ -32,10 +34,14 @@ public class TaxaBookingController : ControllerBase
 
 
         _MQHostName = configuration["MQHostName"] ?? "rabbitmq";
+        _pathCSV = configuration["pathCSV"] ?? string.Empty;
+
+        _logger.LogInformation(_pathCSV + _MQHostName);
 
         var factory = new ConnectionFactory { HostName = _MQHostName };
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
+        
 
     }
 
@@ -83,6 +89,16 @@ public class TaxaBookingController : ControllerBase
         return Ok(taxaBooking);
     }
 
+
+    [HttpGet("getplan"), DisableRequestSizeLimit]
+    public async Task<IActionResult> GetPlan()
+    {
+        CSVService cSVService = new CSVService();
+
+        List<TaxaBooking> taxaBookings = cSVService.Read(_pathCSV);
+
+        return Ok(taxaBookings);
+    }
 
 
 }
