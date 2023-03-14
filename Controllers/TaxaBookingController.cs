@@ -40,15 +40,11 @@ public class TaxaBookingController : ControllerBase
     }
 
 
-    private List<TaxaBooking> _bookings = new List<TaxaBooking>
-    {
-
-        // hard code data
-
-    };
+    
 
 
-
+    // get på csv fil
+    
 
 
     // post metode
