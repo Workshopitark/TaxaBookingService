@@ -24,7 +24,7 @@ public class TaxaBookingController : ControllerBase
     private readonly IModel _channel;
     private readonly string _MQHostName;
     private readonly string _pathCSV;
-    
+
 
 
     // constructor
@@ -41,16 +41,16 @@ public class TaxaBookingController : ControllerBase
         var factory = new ConnectionFactory { HostName = _MQHostName };
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
-        
+
 
     }
 
 
-    
+
 
 
     // get på csv fil
-    
+
 
 
     // post metode
@@ -98,6 +98,22 @@ public class TaxaBookingController : ControllerBase
         List<TaxaBooking> taxaBookings = cSVService.Read(_pathCSV);
 
         return Ok(taxaBookings);
+    }
+
+    [HttpGet("version")]
+    public IEnumerable<string> Get()
+    {
+        _logger.LogInformation("rammer version metode");
+
+        var properties = new List<string>();
+        var assembly = typeof(Program).Assembly;
+        foreach (var attribute in assembly.GetCustomAttributesData())
+        {
+            properties.Add($"{attribute.AttributeType.Name} - {attribute.ToString()}");
+        }
+        return properties;
+
+        _logger.LogInformation("Slut version funk");
     }
 
 
