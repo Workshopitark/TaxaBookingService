@@ -93,6 +93,7 @@ public class TaxaBookingController : ControllerBase
     [HttpGet("getplan"), DisableRequestSizeLimit]
     public async Task<IActionResult> GetPlan()
     {
+        _logger.LogInformation("funktion ramt, build test");
         CSVService cSVService = new CSVService();
 
         List<TaxaBooking> taxaBookings = cSVService.Read(_pathCSV);
