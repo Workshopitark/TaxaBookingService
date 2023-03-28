@@ -106,7 +106,7 @@ public class TaxaBookingController : ControllerBase
     public IEnumerable<string> Get()
     {
         _logger.LogInformation("rammer version metode");
-
+        // sidste merge + build pipeline test
         var properties = new List<string>();
         var assembly = typeof(Program).Assembly;
         foreach (var attribute in assembly.GetCustomAttributesData())
